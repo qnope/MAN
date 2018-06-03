@@ -46,6 +46,7 @@ The classes for manage a thread pool are defined as follow :
 
 ### How to use it ?
 The first thing to do is to create a _function_ to run.
+
     struct Test {
         int operator()(int *a, int b) noexcept {
             auto r = *a + b;
