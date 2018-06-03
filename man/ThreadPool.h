@@ -6,10 +6,10 @@
 
 namespace man {
 template<typename ...>
-class ThreadPoolWithArgsAndContext;
+class ThreadPoolWithContextsAndArgs;
 
-template<typename ... Args, typename ... Contexts>
-class ThreadPoolWithArgsAndContext<type_list<Args...>, type_list<Contexts...>> {
+template<typename ... Contexts, typename ... Args>
+class ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<Args...>> {
     using Queue = RunnableQueue<type_list<Contexts..., Args...>, type_list<Args...>>;
     using RunnableAndArgs = typename Queue::RunnableAndArgs;
     using Context = std::tuple<Contexts...>;
@@ -20,7 +20,7 @@ public:
      * @param function that initialize each Context variable
      */
     template<typename ...Fs>
-    ThreadPoolWithArgsAndContext(std::size_t numberOfThreads, Fs&& ...initializers) noexcept :
+    ThreadPoolWithContextsAndArgs(std::size_t numberOfThreads, Fs&& ...initializers) noexcept :
         m_threadNumber{numberOfThreads},
         m_queues{numberOfThreads} {
         static_assert(sizeof...(Contexts) == sizeof...(Fs), "Each Context must have an initializer");
@@ -35,8 +35,8 @@ public:
     /**
      * Construct the thread pool
      */
-    ThreadPoolWithArgsAndContext() noexcept :
-        ThreadPoolWithArgsAndContext{std::max<std::size_t>(std::thread::hardware_concurrency() - 1, 1)}{}
+    ThreadPoolWithContextsAndArgs() noexcept :
+        ThreadPoolWithContextsAndArgs{std::max<std::size_t>(std::thread::hardware_concurrency() - 1, 1)}{}
 
     /**
      * This function add a runnable into the runnables collection.
@@ -79,7 +79,7 @@ public:
         m_runnables.clear();
     }
 
-    ~ThreadPoolWithArgsAndContext() noexcept {
+    ~ThreadPoolWithContextsAndArgs() noexcept {
         auto areFinished = [](auto &runnable){return std::get<0>(runnable).isFinished();};
         assert(std::all_of(m_runnables.begin(), m_runnables.end(), areFinished));
 
@@ -154,12 +154,12 @@ private:
     std::vector<Queue> m_queues;
 };
 
-using ThreadPool = ThreadPoolWithArgsAndContext<type_list<>, type_list<>>;
+using ThreadPool = ThreadPoolWithContextsAndArgs<type_list<>, type_list<>>;
 
 template<typename ...Args>
-using ThreadPoolWithArgs = ThreadPoolWithArgsAndContext<type_list<Args...>, type_list<>>;
+using ThreadPoolWithArgs = ThreadPoolWithContextsAndArgs<type_list<>, type_list<Args...>>;
 
 template<typename ...Contexts>
-using ThreadPoolWithContext = ThreadPoolWithArgsAndContext<type_list<>, type_list<Contexts...>>;
+using ThreadPoolWithContext = ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<>>;
 
 }

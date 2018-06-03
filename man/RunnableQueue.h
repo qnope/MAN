@@ -12,10 +12,10 @@ struct type_list{};
 template<typename...>
 class RunnableQueue;
 
-template<typename... OnlyArgs, typename... ArgsAndContexts>
-class RunnableQueue<type_list<ArgsAndContexts...>, type_list<OnlyArgs...>> {
+template<typename... OnlyArgs, typename... ContextsAndArgs>
+class RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>> {
 public:
-    using RunnableAndArgs = std::tuple<Runnable<ArgsAndContexts...>, OnlyArgs...>;
+    using RunnableAndArgs = std::tuple<Runnable<ContextsAndArgs...>, OnlyArgs...>;
 
     RunnableQueue() noexcept {}
 

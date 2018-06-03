@@ -110,7 +110,7 @@ struct Test {
 };
 
 void test() {
-    man::ThreadPoolWithArgsAndContext<man::type_list<int>, man::type_list<int*>>
+    man::ThreadPoolWithContextsAndArgs<man::type_list<int*>, man::type_list<int>>
             poolContext{1,
                         []{return new int{42};}};
     auto runnable = poolContext.addRunnable(Test{}, 42);
