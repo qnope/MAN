@@ -1,5 +1,5 @@
 # Introduction
-MAN is a ThreadPool wrote in C++17. The name is chose because, at least in France, it is said than men are not able to do several things at the same times.
+MAN is a ThreadPool wrote in C++17. The name is chosen because, at least in France, it is said that men are not able to do several things at the same times.
 
 # Different classes
 ## Runnable
@@ -32,8 +32,8 @@ class RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>>;
 
 The `ContextsAndArgs...` represents all the arguments that the Runnable will take.
 
-* Contexts mean arguments that lives on the thread on which the Runnable will be run.
-* Args mean the argument that you will directly pass to the runnable when you call launch.
+* Contexts mean arguments that live on the thread on which the Runnable will be running.
+* Args mean the argument that you will directly pass to the `Runnable` when you call launch.
 
 ## ThreadPool
 ### Introduction
@@ -64,7 +64,7 @@ struct Test {
 ```
 
 Here, the function takes two arguments : `int*, int`. Let's assume that
-the first arguments is a context variable, and the second is a direct argument.
+the first argument is a context variable, and the second is a direct argument.
 
 The second thing to do is to create a thread pool. We must give to the thread pool the
 context types, which is an `int*`, and an argument type, which is an `int` here.
