@@ -6,7 +6,9 @@ MAN is a ThreadPool wrote in C++17. The name is chose because, at least in Franc
 ### Introduction
 The class `Runnable` is defined like that :
 
-    class Runnable<Args...>;
+```C++
+class Runnable<Args...>;
+```
 
 The `Args...` are the types of the arguments to give to the `Runnable::operator();` or its `launch` method.
 
@@ -24,7 +26,9 @@ The `Args...` are the types of the arguments to give to the `Runnable::operator(
 ### Introduction
 The class `RunnableQueue` is defined as follow :
 
-    RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>>;
+```C++
+RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>>;
+```
 
 The `ContextsAndArgs...` represents all the arguments that the Runnable will take.
 
@@ -35,25 +39,29 @@ The `ContextsAndArgs...` represents all the arguments that the Runnable will tak
 ### Introduction
 The classes for manage a thread pool are defined as follow :
 
-    class ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<Args...>>;
-    using ThreadPool = ThreadPoolWithContextsAndArgs<type_list<>, type_list<>>;
+```C++
+class ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<Args...>>;
+using ThreadPool = ThreadPoolWithContextsAndArgs<type_list<>, type_list<>>;
 
-    template<typename ...Args>
-    using ThreadPoolWithArgs = ThreadPoolWithContextsAndArgs<type_list<>, type_list<Args...>>;
+template<typename ...Args>
+using ThreadPoolWithArgs = ThreadPoolWithContextsAndArgs<type_list<>, type_list<Args...>>;
 
-    template<typename ...Contexts>
-    using ThreadPoolWithContext = ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<>>;
+template<typename ...Contexts>
+using ThreadPoolWithContext = ThreadPoolWithContextsAndArgs<type_list<Contexts...>, type_list<>>;
+```
 
 ### How to use it ?
 The first thing to do is to create a _function_ to run.
 
-    struct Test {
-        int operator()(int *a, int b) noexcept {
-            auto r = *a + b;
-            delete a;
-            return r;
-        }
-    };
+```C++
+struct Test {
+    int operator()(int *a, int b) noexcept {
+        auto r = *a + b;
+        delete a;
+        return r;
+    }
+};
+```
 
 Here, the function takes two arguments : `int*, int`. Let's assume that
 the first arguments is a context variable, and the second is a direct argument.
@@ -65,12 +73,14 @@ After, we call the function `addRunnable` and give it the function and the argum
 After we wait for all tasks within the threadPool are finished (we could also do it for
 the task only) and we check the result.
 
-    man::ThreadPoolWithContextsAndArgs<man::type_list<int*>, man::type_list<int>>
-            poolContext{1,
-                        []{return new int{42};}};
-    auto runnable = poolContext.addRunnable(Test{}, 42);
-    poolContext.wait();
-    assert(runnable->getResult<int>() == 42 + 42);
+```C++
+man::ThreadPoolWithContextsAndArgs<man::type_list<int*>, man::type_list<int>>
+        poolContext{1,
+                    []{return new int{42};}};
+auto runnable = poolContext.addRunnable(Test{}, 42);
+poolContext.wait();
+assert(runnable->getResult<int>() == 42 + 42);
+```
 
 # Futures improvements
 * Runnable : No dynamic allocation, use aligned_storage instead.
