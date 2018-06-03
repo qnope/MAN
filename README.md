@@ -27,7 +27,7 @@ The `Args...` are the types of the arguments to give to the `Runnable::operator(
 The class `RunnableQueue` is defined as follow :
 
 ```C++
-RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>>;
+class RunnableQueue<type_list<ContextsAndArgs...>, type_list<OnlyArgs...>>;
 ```
 
 The `ContextsAndArgs...` represents all the arguments that the Runnable will take.
