@@ -5,4 +5,5 @@ MAN is a ThreadPool wrote in C++17. The name is chose because, at least in Franc
 ## Runnable
 ### Introduction
 The class `Runnable` is defined like that :
+
     template<typename ...Args> class Runnable;
